@@ -1,0 +1,49 @@
+描述统计：
+       study_pressure  social_support  positive_coping     anxiety  depression  sleep_quality
+count      200.000000      200.000000       200.000000  200.000000  200.000000     200.000000
+mean        29.203325       33.099601        23.556300   19.517794   15.079176       4.942000
+std          7.760040        7.107917         4.779949    5.894474    5.384128       4.224698
+min         10.503239       12.611586         7.453975    6.598435    0.517531       0.000000
+25%         23.943823       28.441500        20.327220   15.184718   11.394627       1.075000
+50%         28.331531       32.723795        23.951407   18.841977   14.900295       4.100000
+75%         34.007530       37.591427        27.741952   24.363329   18.946698       7.825000
+max         50.000000       50.000000        30.000000   30.000000   30.000000      17.000000
+
+相关矩阵：
+                 study_pressure  social_support  positive_coping  anxiety  depression  sleep_quality
+study_pressure            1.000          -0.416            0.400    0.588       0.319         -0.593
+social_support           -0.416           1.000           -0.162   -0.288      -0.176          0.353
+positive_coping           0.400          -0.162            1.000    0.241       0.150         -0.234
+anxiety                   0.588          -0.288            0.241    1.000       0.662         -0.367
+depression                0.319          -0.176            0.150    0.662       1.000         -0.105
+sleep_quality            -0.593           0.353           -0.234   -0.367      -0.105          1.000
+
+回归结果：
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          sleep_quality   R-squared:                       0.366
+Model:                            OLS   Adj. R-squared:                  0.353
+Method:                 Least Squares   F-statistic:                     28.14
+Date:                Thu, 07 May 2026   Prob (F-statistic):           1.85e-18
+Time:                        19:20:34   Log-Likelihood:                -525.90
+No. Observations:                 200   AIC:                             1062.
+Df Residuals:                     195   BIC:                             1078.
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+===================================================================================
+                      coef    std err          t      P>|t|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+const              10.7475      2.181      4.929      0.000       6.447      15.048
+study_pressure     -0.2943      0.037     -8.005      0.000      -0.367      -0.222
+social_support      0.0776      0.037      2.070      0.040       0.004       0.151
+positive_coping     0.0062      0.056      0.111      0.912      -0.104       0.116
+gender              0.1809      0.502      0.361      0.719      -0.808       1.170
+==============================================================================
+Omnibus:                        3.849   Durbin-Watson:                   2.002
+Prob(Omnibus):                  0.146   Jarque-Bera (JB):                3.518
+Skew:                           0.317   Prob(JB):                        0.172
+Kurtosis:                       3.143   Cond. No.                         458.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

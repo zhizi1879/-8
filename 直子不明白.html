@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清朝疆域 · 现代中国 · 割让土地交互地图</title>
+    <!-- Leaflet 核心样式与脚本 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; background: #2a3a4a; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+        #map { height: 85vh; width: 95%; max-width: 1400px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 3px solid #c9b28b; margin-top: 20px; }
+        .legend {
+            background: rgba(20, 30, 40, 0.85);
+            backdrop-filter: blur(6px);
+            color: #eee;
+            padding: 18px 22px;
+            border-radius: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin: 18px 0 10px;
+            border: 1px solid #b8a07c;
+            font-weight: 400;
+        }
+        .legend-item { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; }
+        .color-box { width: 28px; height: 18px; border-radius: 20px; }
+        .dashed-line { width: 32px; height: 4px; background: repeating-linear-gradient(90deg, #e63946, #e63946 8px, transparent 8px, transparent 14px); }
+        .solid-line { width: 32px; height: 4px; background: #1e5f8e; }
+        .info-note {
+            background: #ecd9b4;
+            color: #1d2c3a;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: inset 0 2px 5px rgba(255,255,240,0.8), 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+        .info-note i { font-style: normal; color: #a03333; margin: 0 6px; }
+        a { color: #ffd966; }
+    </style>
+</head>
+<body>
+    <div class="info-note">
+        ⏳ 点击任一彩色割让区域 → 自动放大并显示历史事件 · 边界数据为历史示意，精确版本可替换GeoJSON
+    </div>
+    <div id="map"></div>
+    <div class="legend">
+        <div class="legend-item"><span class="color-box" style="background: transparent; border: 3px dashed #e63946;"></span> <span>清朝疆域界线 (虚线)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #1e5f8e; opacity:0.5;"></span> <span>现代中国 (半透明填充)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #d45d5d;"></span> <span>外东北 / 库页岛 (瑷珲条约·北京条约)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #bf8f4a;"></span> <span>外蒙古 (1911独立 / 1946承认)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #6a4e9b;"></span> <span>唐努乌梁海 (俄/苏吞并)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #2a7f6e;"></span> <span>巴尔喀什湖地区 (伊犁条约等)</span></div>
+        <div class="legend-item"><span class="color-box" style="background: #b57842;"></span> <span>香港 / 九龙 (南京条约·北京条约)</span></div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- 1. 初始化地图 ----------
+            const map = L.map('map', {
+                center: [38.5, 105.0],   // 大致中国中心
+                zoom: 4,
+                zoomControl: true,
+                fadeAnimation: true,
+                attributionControl: true
+            });
+
+            // 底图: 使用较清晰的CartoDB Voyager (无标注干扰少) + 额外标注底图备用
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href=" ">OpenStreetMap</a >, &copy; CartoDB'
+            }).addTo(map);
+
+            // ---------- 2. 定义辅助函数：点击放大+弹窗 ----------
+            function bindAreaPopup(feature, layer, areaName, eventInfo) {
+                layer.on('click', function(e) {
+                    // 放大至该区域边界 (适配zoom级别)
+                    map.flyToBounds(layer.getBounds(), { duration: 1.2, easeLinearity: 0.25 });
+                    // 绑定并打开popup
+                    layer.bindPopup(`
+                        <div style="font-size:1.3rem; font-weight:bold; color:#2c3e50;">📌 ${areaName}</div>
+                        <div style="font-size:1rem; margin: 8px 0; color:#1e3c4f;">${eventInfo}</div>
+                        <div style="border-top:1px solid #aaa; margin:8px 0;"></div>
+                        <div style="font-size:0.9rem; color:#4f5b66;">🕰️ 时期: 晚清至民国</div>
+                    `, { closeButton: true, maxWidth: 300 }).openPopup();
+                });
+            }
+
+            // ---------- 3. 现代中国边界 (来自阿里DataV 开放API) ----------
+            const chinaModernUrl = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json'; // 包含南海诸岛
+
+            fetch(chinaModernUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('现代中国边界加载失败');
+                    return response.json();
+                })
+                .then(chinaGeoJson => {
+                    L.geoJSON(chinaGeoJson, {
+                        style: {
+                            color: '#1e5f8e',       // 深蓝边界
+                            weight: 2.5,
+                            opacity: 0.9,
+                            fillColor: '#3a78a2',
+                            fillOpacity: 0.35,
+                            dashArray: null,          // 实线
+                            smoothFactor: 1
+                        },
+                        interactive: false            // 不干扰点击割让区域
+                    }).addTo(map);
+                })
+                .catch(err => {
+                    console.warn('无法加载现代中国边界，使用备用手绘轮廓（示意）', err);
+                    // 备用的简单中国轮廓（多边形示意，无法涵盖所有但确保有东西展示）
+                    const fallbackChina = [
+                        [ [115,40], [118,38], [122,30], [118,22], [108,18], [98,20], [88,26], [80,30], [78,38], [85,44], [95,48], [108,48], [118,45], [123,42], [115,40] ]
+                    ];
+                    L.polygon(fallbackChina, { color: '#1e5f8e', weight: 2, fillColor: '#3a78a2', fillOpacity: 0.3, interactive: false }).addTo(map);
+                });
+
+            // ---------- 4. 清朝疆域边界 (虚线勾勒极盛版图) ----------
+            // 手工勾勒大致范围: 从外兴安岭–库页岛–巴尔喀什湖–喜马拉雅–缅甸–台湾–海南
+            const qingBoundaryPoints = [
+                [55.0, 125.0], // 外兴安岭西段
+                [58.0, 135.0], // 鄂霍次克海北岸
+                [55.0, 142.0], // 堪察加半岛附近 (含库页岛)
+                [50.0, 145.0], // 千岛群岛西北 (示意)
+                [45.0, 140.0], // 北海道北 (实际上未到, 但描大轮廓)
+                [38.0, 135.0], // 日本海西南
+                [33.0, 128.0], // 东海
+                [25.0, 122.0], // 台湾以东
+                [20.0, 115.0], // 南海 (曾母暗沙附近)
+                [15.0, 110.0], // 越南中部 (清朝极盛时影响)
+                [18.0, 100.0], // 缅甸北部
+                [25.0, 95.0],  // 麦克马洪线附近 (传统西藏南方)
+                [30.0, 80.0],  // 巴尔蒂斯坦 (拉达克西)
+                [38.0, 72.0],  // 帕米尔西
+                [45.0, 73.0],  // 巴尔喀什湖西北
+                [50.0, 80.0],  // 西西伯利亚南
+                [55.0, 105.0], // 贝加尔湖以东 (清曾控制)
+                [55.0, 125.0]  // 闭合
+            ];
+
+            L.polyline(qingBoundaryPoints, {
+                color: '#e63946',
+                weight: 4,
+                opacity: 0.9,
+                dashArray: '12, 10',   // 醒目虚线代表历史边界
+                lineJoin: 'round',
+                smoothFactor: 1.5,
+                interactive: false
+            }).addTo(map);
+
+            // 再增加一条内部虚线强化视觉效果 (较细)
+            L.polyline(qingBoundaryPoints, {
+                color: '#ffb3b3',
+                weight: 1.5,
+                opacity: 0.7,
+                dashArray: '6, 12',
+                interactive: false
+            }).addTo(map);
+
+            // ---------- 5. 割让土地多边形 (各自独立, 可点击) ----------
+            // 区域1: 外东北 (含库页岛大部)  颜色 #d45d5d
+            const outerNortheast = L.polygon([
+                [52.5, 120.0], [55.5, 125.0], [58.0, 135.0], [55.0, 142.0], [50.0, 144.0], [48.5, 141.0],
+                [47.5, 135.0], [48.0, 132.0], [49.5, 128.0], [51.0, 124.0], [52.5, 120.0]
+            ], { color: '#b03a3a', weight: 2, fillColor: '#d45d5d', fillOpacity: 0.7, dashArray: '5, 6' });
+
+            bindAreaPopup(null, outerNortheast, '外东北 & 库页岛', '🔹 1858《瑷珲条约》·1860《北京条约》割让予俄罗斯，面积约100万平方公里。');
+            outerNortheast.addTo(map);
+
+            // 区域2: 外蒙古 (范围大致蒙古国)  颜色 #bf8f4a
+            const outerMongolia = L.polygon([
+                [49.0, 88.0], [52.0, 92.0], [52.0, 106.0], [50.0, 115.0], [47.0, 118.0], [43.0, 114.0],
+                [42.0, 108.0], [42.5, 98.0], [45.0, 92.0], [49.0, 88.0]
+            ], { color: '#8f5f2c', weight: 2, fillColor: '#bf8f4a', fillOpacity: 0.7, dashArray: '4, 4' });
+
+            bindAreaPopup(null, outerMongolia, '外蒙古', '🔹 1911年博克多汗宣布独立，1946年中华民国承认其独立。现为蒙古国。');
+            outerMongolia.addTo(map);
+
+            // 区域3: 唐努乌梁海  颜色 #6a4e9b
+            const tannuUriankhai = L.polygon([
+                [50.0, 88.5], [52.2, 90.0], [53.0, 95.0], [52.5, 98.5], [50.8, 98.0], [49.8, 94.0], [50.0, 88.5]
+            ], { color: '#4a2f7a', weight: 2, fillColor: '#6a4e9b', fillOpacity: 0.8, dashArray: '6, 3' });
+
+            bindAreaPopup(null, tannuUriankhai, '唐努乌梁海', '🔹 1914年被沙俄吞并，1944年正式成为苏联图瓦自治州，今属俄罗斯联邦。');
+            tannuUriankhai.addTo(map);
+
+            // 区域4: 巴尔喀什湖以东以南 (伊犁河谷及七河地区)  颜色 #2a7f6e
+            const balkhash = L.polygon([
+                [45.0, 74.0], [47.5, 75.0], [48.5, 80.0], [46.5, 83.0], [43.8, 82.0], [42.8, 78.5], [43.2, 75.0], [45.0, 74.0]
+            ], { color: '#1b5e4a', weight: 2, fillColor: '#2a7f6e', fillOpacity: 0.75, dashArray: '6, 6' });
+
+            bindAreaPopup(null, balkhash, '巴尔喀什湖地区', '🔹 1864《勘分西北界约记》及后续条约割让给俄罗斯，现属哈萨克斯坦。');
+            balkhash.addTo(map);
+
+            // 区域5: 香港 (包括香港岛、九龙)  颜色 #b57842
+            const hongKong = L.polygon([
+                [22.2, 114.0], [22.4, 114.2], [22.3, 114.4], [22.1, 114.3], [22.1, 114.1], [22.2, 114.0]
+            ], { color: '#8f5f2c', weight: 2, fillColor: '#b57842', fillOpacity: 0.85, dashArray: '4, 6' });
+
+            bindAreaPopup(null, hongKong, '香港 & 九龙', '🔹 1842《南京条约》割香港岛，1860《北京条约》割九龙，1898租借新界。1997回归。');
+            hongKong.addTo(map);
+
+            // 区域6: 澳门 (原属清，后葡萄牙占据)  可加一个
+            const macau = L.polygon([
+                [22.1, 113.53], [22.15, 113.57], [22.13, 113.61], [22.08, 113.6], [22.06, 113.55], [22.1, 113.53]
+            ], { color: '#7a5d3c', weight: 2, fillColor: '#b57842', fillOpacity: 0.7, dashArray: '3, 6' });
+
+            bindAreaPopup(null, macau, '澳门', '🔹 1557年葡萄牙人定居，1887《中葡和好通商条约》承认永居，1999回归。');
+            macau.addTo(map);
+
+            // 区域7: 台湾 (曾被割让，但已属中国，故用另一种方式标注历史事件) —— 我们用浅色填充+点击显示历史，但不作为割让地处理
+            const taiwan = L.polygon([
+                [25.3, 121.0], [25.0, 122.0], [24.0, 121.8], [22.5, 121.5], [22.0, 120.5], [22.5, 119.8], [24.0, 120.2], [25.1, 120.8], [25.3, 121.0]
+            ], { color: '#5a4a3a', weight: 1.8, fillColor: '#d9b382', fillOpacity: 0.3, dashArray: '2, 6', interactive: true });
+
+            taiwan.on('click', function() {
+                map.flyToBounds(taiwan.getBounds(), { duration: 1.2 });
+                taiwan.bindPopup(`
+                    <div style="font-size:1.3rem; font-weight:bold;">🏝️ 台湾</div>
+                    <div>1895《马关条约》割让给日本，1945年光复。现为中国领土不可分割的一部分。</div>
+                `).openPopup();
+            });
+            taiwan.addTo(map);
+
+            // 还可以加一个帕米尔区域示意 (颜色近似巴尔喀什)
+            const pamir = L.polygon([
+                [38.0, 73.0], [39.5, 72.0], [41.0, 73.5], [39.8, 75.0], [38.0, 74.0], [38.0, 73.0]
+            ], { color: '#1b5e4a', weight: 2, fillColor: '#2a7f6e', fillOpacity: 0.6, dashArray: '5, 5' });
+
+            bindAreaPopup(null, pamir, '帕米尔高原', '🔹 1895《英俄协议》私分帕米尔，清朝失去对该地控制，现分属塔吉克斯坦、阿富汗。');
+            pamir.addTo(map);
+
+            // 额外点缀: 钓鱼岛 (用小标记示意)
+            L.circleMarker([25.75, 123.5], { radius: 6, color: '#b30202', weight: 2, fillColor: '#f5a97f', fillOpacity: 0.9 })
+                .bindPopup('钓鱼岛及其附属岛屿<br>中国固有领土').addTo(map);
+
+            // ---------- 6. 最后加上一些小的历史标注线条(虚线痕迹) 装饰 ----------
+            const dashEffect = L.polyline([
+                [52.0, 110.0], [52.0, 125.0], [48.0, 135.0], [43.0, 132.0]
+            ], { color: '#a36447', weight: 1.2, opacity: 0.5, dashArray: '2, 6', interactive: false }).addTo(map);
+
+            // 欢迎信息
+            setTimeout(() => {
+                map.openPopup('<b>🀆 清朝疆域 · 割让历史</b><br>点击彩色区域放大查看详情', [38, 115], { closeButton: false, autoClose: 4000 });
+            }, 800);
+        })();
+    </script>
+    <!-- 备注：历史边界与割让区域仅为教学示意，精确研究请参考专业历史地理文献 -->
+</body>
+</html>
