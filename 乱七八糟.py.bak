@@ -7,7 +7,7 @@ from datetime import datetime
 import os
 import io  # 新增：用于二进制读取音频，解决文件打开报错
 
-st.set_page_config(page_title="规培生正念解压站", layout="centered", page_icon="\U0001F9D8\U0000200D\U00002640\U0000FE0F")
+st.set_page_config(page_title="规培生正念解压站", layout="centered", page_icon="🧘‍♀️")
 
 
 # ========== 全局状态初始化（加固版，兼容旧版Streamlit） ==========
@@ -44,7 +44,7 @@ def get_audio_bytes(file_path):
         with open(file_path, "rb") as f:        使用 打开(文件路径, "rb") 作为 f:
             return io.BytesIO(f.read())            返回 io.BytesIO(f.读取())
     except Exception:
-        st.warning(f"\U000026A0\U0000FE0F 音频文件加载失败：{os.path.basename(file_path)}，请检查文件是否存在")
+        st.warning(f"⚠️ 音频文件加载失败：{os.path.basename(file_path)}，请检查文件是否存在")
         return None
 
 
@@ -52,21 +52,21 @@ def get_audio_bytes(file_path):
 def show_home():
     st.markdown("""    st.标记("""
     <div style='text-align:center;padding:60px 20px 40px;'>
-        <div style='font-size:5em;margin-bottom:20px;'>\U0001F9D8\U0000200D\U00002640\U0000FE0F</div>
+        <div style='font-size:5em;margin-bottom:20px;'>🧘‍♀️</div>
         <h1 style='font-size:2.2em;margin-bottom:10px;color:#1e1b4b;'>规培生正念解压站</h1>
         <p style='font-size:1.1em;color:#6b7280;margin-bottom:8px;'>遵义医科大学 · 规培生心理支持系统</p>
-        <p style='font-size:0.95em;color:#9ca3af;margin-bottom:50px;'>累了就来坐坐，这里没有考核 \U0001F33F</p>
+        <p style='font-size:0.95em;color:#9ca3af;margin-bottom:50px;'>累了就来坐坐，这里没有考核 🌿</p>
     </div>
     """, unsafe_allow_html=True)
 
     cols = st.columns(3)
     modules = [
-        ("\U0001F4CB", "情绪识别小助手", "PHQ-9 + GAD-7 专业测评\n2分钟了解你的情绪状态", "\U0001F4CB 情绪识别小助手"),
-        ("\U0001F9D8", "规培间隙的放松", "呼吸法 · 身体扫描 · 正念倾听\n给自己3分钟", "\U0001F9D8 规培间隙的放松"),
-        ("\U0001F4DD", "工作情绪存档", "记录每日心情\n用数据看见情绪变化", "\U0001F4DD 工作情绪存档"),
-        ("\U0001F333", "医护吐槽安全屋", "完全匿名树洞\n说出来会好受一点", "\U0001F333 医护吐槽安全屋"),
-        ("\U0001F4DA", "情绪急救科普册", "规培生必知心理知识\n3分钟能改变什么", "\U0001F4DA 情绪急救科普册"),
-        ("\U0001F3C6", "抗压升级日志", "打卡 · 徽章 · 等级\n见证你的每一步成长", "\U0001F3C6 抗压升级日志"),
+        ("📋", "情绪识别小助手", "PHQ-9 + GAD-7 专业测评\n2分钟了解你的情绪状态", "📋 情绪识别小助手"),
+        ("🧘", "规培间隙的放松", "呼吸法 · 身体扫描 · 正念倾听\n给自己3分钟", "🧘 规培间隙的放松"),
+        ("📝", "工作情绪存档", "记录每日心情\n用数据看见情绪变化", "📝 工作情绪存档"),
+        ("🌳", "医护吐槽安全屋", "完全匿名树洞\n说出来会好受一点", "🌳 医护吐槽安全屋"),
+        ("📚", "情绪急救科普册", "规培生必知心理知识\n3分钟能改变什么", "📚 情绪急救科普册"),
+        ("🏆", "抗压升级日志", "打卡 · 徽章 · 等级\n见证你的每一步成长", "🏆 抗压升级日志"),
     ]
 
     for i, (icon, title, desc, page_name) in enumerate(modules):
@@ -78,14 +78,14 @@ def show_home():
     st.markdown("---")
     st.markdown("""    st.标记("""
     <div style='text-align:center;padding:20px 0 40px;color:#9ca3af;font-size:0.85em;'>
-        \U0001F4A1 本系统仅供减压参考，不构成医学建议 · 持续困扰请咨询心理健康中心 28643572
+        💡 本系统仅供减压参考，不构成医学建议 · 持续困扰请咨询心理健康中心 28643572
     </div>
     """, unsafe_allow_html=True)
 
 
 # ========== 情绪识别 ==========
 def show_page_1():
-    st.title("\U0001F4CB 情绪识别小助手")
+    st.title("📋 情绪识别小助手")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
 
@@ -115,13 +115,13 @@ def show_page_1():
 
     def get_level(phq9, gad7):    定义 get_level(phq9, gad7):
         if phq9 <= 4:        如果 phq9 小于等于 4:
-            return "\U0001F7E2 情绪正常", "你的情绪状态良好，继续保持正念练习！"
+            return "🟢 情绪正常", "你的情绪状态良好，继续保持正念练习！"
         elif phq9 <= 9:
-            return "\U0001F7E1 轻度情绪困扰", "有一些情绪波动，建议每天做3分钟正念呼吸。"
+            return "🟡 轻度情绪困扰", "有一些情绪波动，建议每天做3分钟正念呼吸。"
         elif phq9 <= 14:
-            return "\U0001F7E0 中度情绪困扰", "情绪压力较大，建议主动找心理老师聊聊。"
+            return "🟠 中度情绪困扰", "情绪压力较大，建议主动找心理老师聊聊。"
         else:        否则:
-            return "\U0001F534 重度情绪困扰", "你正在经历较大的情绪困难，请尽快联系心理健康中心：28643572"
+            return "🔴 重度情绪困扰", "你正在经历较大的情绪困难，请尽快联系心理健康中心：28643572"
 
     if not st.session_state.submitted:
         st.subheader("最近两周，以下情况出现的频率是？")
@@ -138,9 +138,9 @@ def show_page_1():
     else:
         phq9, gad7, total = calc_score(st.session_state.answers)
         phq9_level, phq9_tip = get_level(phq9, gad7)
-        gad7_level = "\U0001F7E2 焦虑正常" if gad7 <= 4 else "\U0001F7E1 轻度焦虑" if gad7 <= 9 else "\U0001F7E0 中度焦虑" if gad7 <= 14 else "\U0001F534 重度焦虑"
+        gad7_level = "🟢 焦虑正常" if gad7 <= 4 else "🟡 轻度焦虑" if gad7 <= 9 else "🟠 中度焦虑" if gad7 <= 14 else "🔴 重度焦虑"
 
-        st.markdown("## \U0001F4CA 情绪监测结果")
+        st.markdown("## 📊 情绪监测结果")
         col1, col2 = st.columns([1, 1])
         with col1:        与列1：
             st.metric("抑郁评分 (PHQ-9)", f"{phq9} / 27", phq9_level.split(" ")[0])            st.度量(“抑郁评分（PHQ-9）”, f"{phq9} / 27", phq9_level.拆分(" ")[0])
@@ -170,7 +170,7 @@ def show_page_1():
         fig.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))        图.更新布局(高度=300, 边距=字典(l=20, r=20, t=40, b=20))
         st.plotly_chart(fig, use_container_width=True)
 
-        if st.button("\U0001F504 重新测评", key="btn_retest"):
+        if st.button("🔄 重新测评", key="btn_retest"):
             st.session_state.answers = ["完全不会"] * 16
             st.session_state.submitted = False
             st.rerun()            st.重新运行()
@@ -178,17 +178,17 @@ def show_page_1():
 
 # ========== 放松练习（音频页） ==========
 def show_page_2():
-    st.title("\U0001F9D8 规培间隙的放松")
+    st.title("🧘 规培间隙的放松")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
 
     exercise = st.selectbox(
         "",
         [
-            "\U0001FAC1 4-7-8 呼吸法（2分钟，值夜班前推荐）",
-            "\U0001F9D8 身体扫描（3分钟，下班后推荐）",
-            "\U0001F442 正念倾听（2分钟，通勤时推荐）",
-            "\U0001F319 深度舒缓放松（4分钟，睡前/高压后推荐）"
+            "🫁 4-7-8 呼吸法（2分钟，值夜班前推荐）",
+            "🧘 身体扫描（3分钟，下班后推荐）",
+            "👂 正念倾听（2分钟，通勤时推荐）",
+            "🌙 深度舒缓放松（4分钟，睡前/高压后推荐）"
         ]
     )
     if "4-7-8" in exercise:    如果 "4-7-8" 在练习中：
@@ -200,7 +200,7 @@ def show_page_2():
     else:    否则:
         audio_path = RELAX_AUDIO
 
-    if st.button("\U0001F3A7 开始练习", type="primary", key="btn_mindfulness"):
+    if st.button("🎧 开始练习", type="primary", key="btn_mindfulness"):
         st.session_state.mindfulness_done = True
         st.session_state.total_sessions += 1
 
@@ -215,22 +215,22 @@ def show_page_2():
         if "4-7-8" in exercise:
             steps = [
                 ("准备好了吗？深呼吸一次...", 3),
-                ("\U0001FAC1 吸气... 1... 2... 3... 4...", 4),
+                ("🫁 吸气... 1... 2... 3... 4...", 4),
                 ("屏住呼吸... 1... 2... 3... 4... 5... 6... 7...", 7),
-                ("\U0001F4A8 慢慢呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8),
-                ("\U0001FAC1 吸气... 1... 2... 3... 4...", 4),
+                ("💨 慢慢呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8),
+                ("🫁 吸气... 1... 2... 3... 4...", 4),
                 ("屏住... 1... 2... 3... 4... 5... 6... 7...", 7),
-                ("\U0001F4A8 呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8),
-                ("\U0001FAC1 吸气... 1... 2... 3... 4...", 4),
+                ("💨 呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8),
+                ("🫁 吸气... 1... 2... 3... 4...", 4),
                 ("屏住... 1... 2... 3... 4... 5... 6... 7...", 7),
-                ("\U0001F4A8 呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8)
+                ("💨 呼气... 1... 2... 3... 4... 5... 6... 7... 8...", 8)
             ]
             for text, sec in steps:            对于文本，第部分中的步骤：
                 placeholder.markdown(f"<div style='text-align:center;font-size:1.6em;padding:20px;'>{text}</div>",                占位符。markdown(f"<div style='text-align:center;font-size:1.6em;padding:20px;'>{text}</div>",
                                      unsafe_allow_html=True)
                 time.sleep(sec)                时间。睡眠(秒)
             placeholder.markdown(            占位符。markdown(
-                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>\U00002705 练习完成！感觉好点了吗？</div>",
+                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>✅ 练习完成！感觉好点了吗？</div>",
                 unsafe_allow_html=True)
 
         elif "身体扫描" in exercise:
@@ -255,7 +255,7 @@ def show_page_2():
                     unsafe_allow_html=True)
                 time.sleep(sec)                时间。睡眠(秒)
             placeholder.markdown(            占位符。markdown(
-                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>\U00002705 扫描完成！</div>",
+                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>✅ 扫描完成！</div>",
                 unsafe_allow_html=True)
 
         elif "正念倾听" in exercise:
@@ -272,7 +272,7 @@ def show_page_2():
                                      unsafe_allow_html=True)
                 time.sleep(sec)                时间。睡眠(秒)
             placeholder.markdown(            占位符。markdown(
-                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>\U00002705 倾听完成！</div>",
+                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>✅ 倾听完成！</div>",
                 unsafe_allow_html=True)
 
         else:        否则:
@@ -293,24 +293,24 @@ def show_page_2():
                                      unsafe_allow_html=True)
                 time.sleep(sec)                时间。睡眠(秒)
             placeholder.markdown(            占位符。markdown(
-                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>\U00002705 深度放松完成！愿你身心安稳 \U0001F49B</div>",
+                "<div style='text-align:center;font-size:1.8em;padding:30px;color:#2e7d32;'>✅ 深度放松完成！愿你身心安稳 💛</div>",
                 unsafe_allow_html=True)
 
 
 # ========== 情绪存档 ==========
 def show_page_3():
-    st.title("\U0001F4DD 工作情绪存档")
+    st.title("📝 工作情绪存档")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
 
-    mood_options = ["\U0001F60A 很好", "\U0001F642 还行", "\U0001F610 一般", "\U0001F614 不太好", "\U0001F622 很差"]
+    mood_options = ["😊 很好", "🙂 还行", "😐 一般", "😔 不太好", "😢 很差"]
     mood_scores = [5, 4, 3, 2, 1]    情绪得分 = [5, 4, 3, 2, 1]
 
     col1, col2 = st.columns([2, 1])
     with col1:
         mood_text = st.radio("今天心情如何？", mood_options, horizontal=True)
     with col2:
-        if st.button("\U0001F4BE 记录", type="primary", key="btn_mood"):
+        if st.button("💾 记录", type="primary", key="btn_mood"):
             st.session_state.mood_history.append({
                 "date": datetime.now().strftime("%m-%d %H:%M"),
                 "mood": mood_text,
@@ -320,17 +320,17 @@ def show_page_3():
 
     if st.session_state.mood_history:
         st.markdown("---")
-        st.markdown("### \U0001F4C8 情绪趋势")
+        st.markdown("### 📈 情绪趋势")
         dates = [h["date"] for h in st.session_state.mood_history]        日期 = [h"日期"] 对于 h 在 st.会话状态.情绪历史中
         scores = [h["score"] for h in st.session_state.mood_history]        分数 = [h"分数"] 对于 h 在 st.会话状态.情绪历史中
         fig = go.Figure(data=go.Scatter(x=dates, y=scores, mode='lines+markers',
                                         line=dict(color='#6366f1', width=3), marker=dict(size=10)))                                        line=字典(颜色='#6366f1', 宽度=3), 标记=字典(大小=10)))
         fig.update_layout(title="近期情绪变化", xaxis_title="时间", yaxis_title="心情分数",        图.update_layout(标题="近期情绪变化", x轴标题="时间", y轴标题="心情分数",
                           yaxis=dict(range=[0, 6], tickvals=[1, 2, 3, 4, 5],                          yaxis=字典(范围=[0, 6], 刻度值=[1, 2, 3, 4, 5],
-                                     ticktext=["\U0001F622 很差", "\U0001F614 不好", "\U0001F610 一般", "\U0001F642 还行", "\U0001F60A 很好"]))
+                                     ticktext=["😢 很差", "😔 不好", "😐 一般", "🙂 还行", "😊 很好"]))
         st.plotly_chart(fig, use_container_width=True)
         st.markdown("---")
-        st.markdown("### \U0001F4CB 历史记录")
+        st.markdown("### 📋 历史记录")
         for h in reversed(st.session_state.mood_history[-10:]):
             st.markdown(f"- **{h['date']}** {h['mood']}")
     else:    否则:
@@ -339,17 +339,17 @@ def show_page_3():
 
 # ========== 树洞 ==========
 def show_page_4():定义 显示页面4():
-    st.title("\U0001F333 医护吐槽安全屋")
+    st.title("🌳 医护吐槽安全屋")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
-    st.subheader("说出来，会好受一点 \U0001F573\U0000FE0F")
+    st.subheader("说出来，会好受一点 🕳️")
     st.markdown("*完全匿名，没有人知道你是谁*")
 
     col1, col2 = st.columns([3, 1])
     with col1:
         new_msg = st.text_area("写下你想说的话...", height=150, placeholder="在这里，你可以说任何话...")
     with col2:
-        if st.button("\U0001F573\U0000FE0F 投入树洞", type="primary", key="btn_treehole"):        如果 st.按钮("\U0000FE0F 投入树洞", 类型="primary", 键="btn_treehole"):
+        if st.button("🕳️ 投入树洞", type="primary", key="btn_treehole"):        如果 st.按钮("️ 投入树洞", 类型="primary", 键="btn_treehole"):
             if new_msg.strip():            如果 new_msg.strip():
                 st.session_state.tree_hole_messages.append({
                     "text": new_msg.strip(),
@@ -358,7 +358,7 @@ def show_page_4():定义 显示页面4():
                 st.rerun()
 
     st.markdown("---")
-    st.markdown("### \U0001F4AC 树洞留言墙")
+    st.markdown("### 💬 树洞留言墙")
     if st.session_state.tree_hole_messages:
         for msg in reversed(st.session_state.tree_hole_messages):
             st.markdown(f"""
@@ -368,22 +368,22 @@ def show_page_4():定义 显示页面4():
     else:
         st.markdown("*树洞还是空的，来写第一条吧...*")
     st.markdown("---")
-    st.markdown("**\U0001F4CC 温馨提示：如果你正在经历严重心理困扰，请拨打24小时心理援助热线：28643572**")
+    st.markdown("**📌 温馨提示：如果你正在经历严重心理困扰，请拨打24小时心理援助热线：28643572**")
 
 
 # ========== 科普 ==========
 def show_page_5():
-    st.title("\U0001F4DA 情绪急救科普册")
+    st.title("📚 情绪急救科普册")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
 
     tips = [
-        {"title": "\U0001F9E0 什么是正念？", "content": "正念是一种「有意识地、不加评判地关注当下」的心理状态。不是放空大脑，而是觉察此刻的感受，不逃避、不纠结。"},
-        {"title": "\U0001F630 规培生为什么容易焦虑？", "content": "长期高压、睡眠不足、角色转换（学生→医生）、医患关系复杂，这些都是焦虑的温床。你不是脆弱，是环境太难了。"},
-        {"title": "\U0001F4A1 3分钟能做什么？", "content": "研究表明，每天3分钟正念呼吸，坚持8周，焦虑水平可降低20%。你不需要1小时，只需要3分钟。"},
-        {"title": "\U0001F3AF 心理韧性不是天生的", "content": "心理韧性像肌肉，可以锻炼。每次你扛过一次压力，韧性就强一点。你现在觉得难，说明你在成长。"},
-        {"title": "\U0001F6AB 这些信号要注意", "content": "连续2周失眠、对什么都没兴趣、经常想哭、不想去医院——如果有这些情况，请主动找心理老师聊聊，这不丢人。"},
-        {"title": "\U0001F91D 求助不是软弱", "content": "医生也会生病，规培生也会累。承认自己需要帮助，恰恰是一种专业素养。你照顾了所有人，也该照顾自己。"},
+        {"title": "🧠 什么是正念？", "content": "正念是一种「有意识地、不加评判地关注当下」的心理状态。不是放空大脑，而是觉察此刻的感受，不逃避、不纠结。"},
+        {"title": "😰 规培生为什么容易焦虑？", "content": "长期高压、睡眠不足、角色转换（学生→医生）、医患关系复杂，这些都是焦虑的温床。你不是脆弱，是环境太难了。"},
+        {"title": "💡 3分钟能做什么？", "content": "研究表明，每天3分钟正念呼吸，坚持8周，焦虑水平可降低20%。你不需要1小时，只需要3分钟。"},
+        {"title": "🎯 心理韧性不是天生的", "content": "心理韧性像肌肉，可以锻炼。每次你扛过一次压力，韧性就强一点。你现在觉得难，说明你在成长。"},
+        {"title": "🚫 这些信号要注意", "content": "连续2周失眠、对什么都没兴趣、经常想哭、不想去医院——如果有这些情况，请主动找心理老师聊聊，这不丢人。"},
+        {"title": "🤝 求助不是软弱", "content": "医生也会生病，规培生也会累。承认自己需要帮助，恰恰是一种专业素养。你照顾了所有人，也该照顾自己。"},
     ]
     for tip in tips:
         with st.expander(tip["title"]):
@@ -392,13 +392,13 @@ def show_page_5():
 
 # ========== 打卡日志 ==========
 def show_page_6():
-    st.title("\U0001F3C6 抗压升级日志")
+    st.title("🏆 抗压升级日志")
     st.markdown("**遵义医科大学 · 规培生心理支持系统**")
     st.markdown("---")
 
     sessions = st.session_state.total_sessions
-    rank = "\U0001F48E 正念大师" if sessions >= 30 else (
-        "\U0001F947 坚持达人" if sessions >= 14 else ("\U0001F948 初级修行者" if sessions >= 7 else "\U0001F331 正念新手"))
+    rank = "💎 正念大师" if sessions >= 30 else (
+        "🥇 坚持达人" if sessions >= 14 else ("🥈 初级修行者" if sessions >= 7 else "🌱 正念新手"))
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -409,37 +409,37 @@ def show_page_6():
         st.metric("连续打卡", f"{st.session_state.check_in_days} 天", "")
 
     st.markdown("---")
-    st.markdown("### \U0001F396 徽章墙")
+    st.markdown("### 🎖 徽章墙")
     if st.session_state.badges:    如果 st.session_state.badges:
         for badge in st.session_state.badges:        对于 badge 在 st.session_state.badges:
             st.markdown(f"- {badge}")
     else:    否则:
         st.markdown("*还没有徽章，快去练习吧！*")
 
-    if st.button("\U00002705 今日打卡", type="primary", key="btn_checkin"):
+    if st.button("✅ 今日打卡", type="primary", key="btn_checkin"):
         st.session_state.check_in_days += 1
         st.session_state.total_sessions += 1
-        if st.session_state.check_in_days >= 7 and "\U0001F525 连续7天" not in st.session_state.badges:        如果 st.session_state.check_in_days 大于或等于 7 并且" 连续7天" 不在badges中：
-            st.session_state.badges.append("\U0001F525 连续7天")
+        if st.session_state.check_in_days >= 7 and "🔥 连续7天" not in st.session_state.badges:        如果 st.session_state.check_in_days 大于或等于 7 并且" 连续7天" 不在badges中：
+            st.session_state.badges.append("🔥 连续7天")
         if st.session_state.total_sessions >= 10 and "⭐ 10次练习" not in st.session_state.badges:        如果 st.session_state.total_sessions 大于等于 10 并且"⭐ 10次练习" 不在badges中：
             st.session_state.badges.append("⭐ 10次练习")
-        if st.session_state.total_sessions >= 30 and "\U0001F48E 正念大师" not in st.session_state.badges:        如果 st.session_state.total_sessions 大于或等于 30 并且" 正念大师"不在badges中：
-            st.session_state.badges.append("\U0001F48E 正念大师")
+        if st.session_state.total_sessions >= 30 and "💎 正念大师" not in st.session_state.badges:        如果 st.session_state.total_sessions 大于或等于 30 并且" 正念大师"不在badges中：
+            st.session_state.badges.append("💎 正念大师")
         st.rerun()        st.重播()
 
     st.markdown("---")
-    st.markdown("**\U0001F4CC 本系统仅供减压参考，不构成医学建议。持续困扰请咨询心理健康中心。**")
+    st.markdown("**📌 本系统仅供减压参考，不构成医学建议。持续困扰请咨询心理健康中心。**")
 
 
 # ========== 路由跳转 ==========
 page_map = {页面映射 = {
     "首页": show_home,
-    "\U0001F4CB 情绪识别小助手": show_page_1,
-    "\U0001F9D8 规培间隙的放松": show_page_2,
-    "\U0001F4DD 工作情绪存档": show_page_3,
-    "\U0001F333 医护吐槽安全屋": show_page_4,
-    "\U0001F4DA 情绪急救科普册": show_page_5,
-    "\U0001F3C6 抗压升级日志": show_page_6,
+    "📋 情绪识别小助手": show_page_1,
+    "🧘 规培间隙的放松": show_page_2,
+    "📝 工作情绪存档": show_page_3,
+    "🌳 医护吐槽安全屋": show_page_4,
+    "📚 情绪急救科普册": show_page_5,
+    "🏆 抗压升级日志": show_page_6,
 }
 
 if st.session_state.current_page == "首页":
@@ -447,6 +447,6 @@ if st.session_state.current_page == "首页":
 else:
     page_map[st.session_state.current_page]()    页面映射[状态.会话状态.当前页面]()
     st.markdown("---")
-    if st.button("\U0001F3E0 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):
+    if st.button("🏠 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):    如果 st.按钮(" 返回首页", key="btn_back_home_global", use_container_width=False):
         st.session_state.current_page = "首页"
         st.rerun()
