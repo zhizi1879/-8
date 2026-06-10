@@ -1,28 +1,28 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import streamlit as st
-import plotly.graph_objects as go
-import time
-from datetime import datetime
-import os
-import io  # 新增：用于二进制读取音频，解决文件打开报错
+# -*- coding: utf-8 -*-# -*- 编码: utf-8 -*-
+import streamlit as st导入 streamlit 作为 st将 streamlit 导入为 st
+import plotly.graph_objects as go导入 plotly.graph_objects 作为 go
+import time导入 time导入 time导入 time
+from datetime import datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime从 datetime 导入 datetime
+import导入 os 操作系统
+import io  # 新增：用于二进制读取音频，解决文件打开报错导入 io  # 新增：用于二进制读取音频，解决文件打开报错
 
-st.set_page_config(page_title="规培生正念解压站", layout="centered", page_icon="🧘‍♀️")
+st.街.set_page_config设置页面配置set_page_config 设置页面配置(.set_page_config(街.街.set_page_config设置页面配置set_page_config 设置页面配置(.set_page_config设置页面配置set_page_config 设置页面配置(page_title="规培生正念解压站", layout="centered", page_icon="🧘‍♀️")
 
 
 # ========== 全局状态初始化（加固版，兼容旧版Streamlit） ==========
-def init_session_state():
-    if "check_in_days" not in st.session_state:
+def init_session_state初始化会话状态():
+    if "check_in_days" not in st.session_state:如果 "check_in_days"不在 st.session_state中：    如果 "check_in_days"不在 st.session_state中：
         st.session_state["check_in_days"] = 0
-    if "total_sessions" not in st.session_state:
+    if "total_sessions" not in st.session_state:    如果 "total_sessions" 不在 st.session_state 中：
         st.session_state["total_sessions"] = 0
-    if "badges" not in st.session_state:
+    if "badges" not in st.session_state:    如果“badges”不在 st.session_state 中：
         st.session_state["badges"] = []
     if "mindfulness_done" not in st.session_state:
         st.session_state["mindfulness_done"] = False
-    if "mood_history" not in st.session_state:
+    if "mood_history" not in st.session_state:    如果 "mood_history" 不在 st.session_state 中：
         st.session_state["mood_history"] = []
-    if "tree_hole_messages" not in st.session_state:
+    if "tree_hole_messages" not in st.session_state:    如果 "tree_hole_messages" 不在 st.session_state 中：
         st.session_state["tree_hole_messages"] = []
     if "current_page" not in st.session_state:
         st.session_state["current_page"] = "首页"
@@ -60,7 +60,7 @@ def show_home():
     """, unsafe_allow_html=True)
 
     cols = st.columns(3)
-    modules = [
+    modules = [    模块 = [
         ("📋", "情绪识别小助手", "PHQ-9 + GAD-7 专业测评\n2分钟了解你的情绪状态", "📋 情绪识别小助手"),
         ("🧘", "规培间隙的放松", "呼吸法 · 身体扫描 · 正念倾听\n给自己3分钟", "🧘 规培间隙的放松"),
         ("📝", "工作情绪存档", "记录每日心情\n用数据看见情绪变化", "📝 工作情绪存档"),
@@ -70,10 +70,10 @@ def show_home():
     ]
 
     for i, (icon, title, desc, page_name) in enumerate(modules):
-        with cols[i % 3]:
+        with cols[i % 3]:        在 cols[i % 3] 中：
             if st.button(f"{icon}  {title}", key=f"home_btn_{i}", use_container_width=True):
                 st.session_state.current_page = page_name
-                st.experimental_rerun()
+                st.rerun()
 
     st.markdown("---")
     st.markdown("""
