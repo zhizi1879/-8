@@ -103,7 +103,7 @@ else:
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
-    st.markdown("**📌 温馨提示：本测评仅供参考，不构成医学诊断。如感到持续困扰，请咨询遵义医科大学心理健康中心。**")
+    st.markdown("**📌 温馨提示:本测评仅供参考，不构成医学诊断。如感到持续困扰，请咨询遵义医科大学心理健康中心。**")
 
     if st.button("重新测评"):
         st.session_state.answers = ["从不"] * 15

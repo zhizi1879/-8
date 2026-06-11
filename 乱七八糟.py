@@ -41,7 +41,7 @@ def get_audio_bytes(file_path):
         with open(file_path, "rb") as f:
             return io.BytesIO(f.read())
     except Exception:
-        st.warning(f"⚠️ 音频文件加载失败：{os.path.basename(file_path)}，请检查文件是否存在")
+        st.warning(f"⚠️ 音频文件加载失败:{os.path.basename(file_path)}，请检查文件是否存在")
         return None
 
 
@@ -116,7 +116,7 @@ def show_page_1():
         elif phq9 <= 14:
             return "🟠 中度情绪困扰", "情绪压力较大，建议主动找心理老师聊聊。"
         else:
-            return "🔴 重度情绪困扰", "你正在经历较大的情绪困难，请尽快联系心理健康中心：28643572"
+            return "🔴 重度情绪困扰", "你正在经历较大的情绪困难，请尽快联系心理健康中心:28643572"
 
     if not st.session_state.submitted:
         st.subheader("最近两周，以下情况出现的频率是？")
@@ -355,7 +355,7 @@ def show_page_4():
     else:
         st.markdown("*树洞还是空的，来写第一条吧...*")
     st.markdown("---")
-    st.markdown("**📌 温馨提示：如果你正在经历严重心理困扰，请拨打24小时心理援助热线：28643572**")
+    st.markdown("**📌 温馨提示:如果你正在经历严重心理困扰，请拨打24小时心理援助热线:28643572**")
 
 
 def show_page_5():

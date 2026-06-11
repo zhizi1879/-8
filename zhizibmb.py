@@ -91,10 +91,10 @@ for t in territories:
     popup_html = f"""
     <div style="width:380px; padding:5px;">
         <h4 style="margin-top:0;">{t['name']}</h4>
-        <p><b>面积：</b>{t['area']}<br>
-        <b>性质：</b>{t['category']}<br>
-        <b>条约/脱离：</b>{t['treaty']}<br>
-        <b>现属：</b>{t['now']}</p>
+        <p><b>面积:</b>{t['area']}<br>
+        <b>性质:</b>{t['category']}<br>
+        <b>条约/脱离:</b>{t['treaty']}<br>
+        <b>现属:</b>{t['now']}</p>
     """
 
     if t.get('video'):
@@ -135,10 +135,10 @@ padding: 10px; border-radius: 5px; opacity: 0.9;">
     <p><span style="background-color: red; width: 20px; height: 10px; display: inline-block;"></span> 清朝条约割让领土</p>
     <p><span style="background-color: orange; width: 20px; height: 10px; display: inline-block;"></span> 民国时期脱离领土</p>
     <hr style="margin:5px 0;">
-    <p><b>总面积统计：</b><br>
-    - 清朝割让：约145万平方公里<br>
-    - 民国脱离：约176万平方公里<br>
-    - 合计：约321万平方公里<br>
+    <p><b>总面积统计:</b><br>
+    - 清朝割让:约145万平方公里<br>
+    - 民国脱离:约176万平方公里<br>
+    - 合计:约321万平方公里<br>
     <small>（与1316万-960万=356万接近）</small>
     </p>
     <p><b>📺 点击领土可观看相关B站视频</b></p>
@@ -165,8 +165,8 @@ output_file = 'china_historical_territories_video_only.html'
 m.save(output_file)
 webbrowser.open('file://' + os.path.realpath(output_file))
 
-print(f"🎉 地图已生成：{output_file}")
-print("📌 使用说明：")
+print(f"🎉 地图已生成:{output_file}")
+print("📌 使用说明:")
 print("  1. 双击该HTML文件即可在浏览器中打开")
 print("  2. 点击红色/橙色区域可观看B站视频")
 print("  3. 如果视频无法播放，请检查 territories 列表中的 BV 号是否正确")
